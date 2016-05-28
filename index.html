@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- set viewport size for mobile devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <title>vocoder</title>
+        
+        <link rel="stylesheet" href="css/main.css" />
+    </head>
+    <body>
+        <header>
+            <h1>vocoder</h1>
+        </header>
+        <content>
+            <p>Select effect audio: <input type="file" accept=".mp3,audio/*"/></p>
+            <p>Select target audio: <input type="file" accept=".mp3,audio/*"/></p>
+            <button id="play">Play Audio</button>
+            <button id="stop">Stop Audio</button>
+        </content>
+        <footer>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p>Thilo Ilg - 2016</p>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- load JavaScript -->
+        <script type="text/javascript" src="lib/jquery-2.2.3.js"></script>
+        <script type="text/javascript" scr="lib/fft.js"></script>
+        <script type="text/javascript" src="lib/complex_array.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/vocoder.js"></script>
+    </body>
+</html>
