@@ -22,10 +22,15 @@ var vocoder = (function(){
             dataIn[i] = buffIn.getChannelData(i);
         }
 
-        console.log("0 -> " + dataIn[0][0] + " 1 -> " + dataIn[1][0] + "2 -> " + dataIn[2][0] + " 3 -> " + dataIn[3][0]);
+        //console.log("0 -> " + dataIn[0][0] + " 1 -> " + dataIn[1][0] + "2 -> " + dataIn[2][0] + " 3 -> " + dataIn[3][0]);
 
         for(var s = 0; s < bs; s++){
-            // TODO
+
+            
+
+
+            
+            dataOut[s] = (dataIn[0][s] + dataIn[1][s]) / 2.0;
         }
     }
 

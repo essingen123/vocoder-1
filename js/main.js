@@ -61,8 +61,12 @@ var audio_controller = (function(){
         source[0] = context.createBufferSource();
         source[0].buffer = buffer[0];
 
+        //console.log("outputs source 0 -> " + source[0].numberOfOutputs);
+
         source[1] = context.createBufferSource();
         source[1].buffer = buffer[1];
+
+        //console.log("outputs source 1 -> " + source[1].numberOfOutputs);
 
         merge = context.createChannelMerger(2);
 
