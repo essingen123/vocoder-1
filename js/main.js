@@ -64,12 +64,16 @@ var audio_controller = (function(){
         source[1] = context.createBufferSource();
         source[1].buffer = buffer[1];
 
-        var test = context.createChannelMerger(2);
+        merge = context.createChannelMerger(2);
 
-        source[0].connect(test, 0, 0);
-        source[1].connect(test, 0, 1);
+        source[0].connect(merge, 0, 0);
+        source[1].connect(merge, 0, 1);
 
-        test.connect(context.destination);
+        //source[0].connect(vocoder);
+
+        merge.connect(vocoder);
+
+        vocoder.connect(context.destination);
 
         source[0].start();
         source[1].start();
