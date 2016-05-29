@@ -15,8 +15,9 @@ var vocoder = (function(){
         var buffIn = evt.inputBuffer;
         var buffOut = evt.outputBuffer;
 
-        console.log("buffIn: " + buffIn.numberOfChannels + " buffOut: " + buffOut.numberOfChannels);
+        //console.log("buffIn: " + buffIn.numberOfChannels + " buffOut: " + buffOut.numberOfChannels);
 
+        /**
         var dataOut = buffOut.getChannelData(0);
 
         for(var n = 0; n < buffIn.numberOfChannels; n++){
@@ -27,6 +28,7 @@ var vocoder = (function(){
             }
 
         }
+        **/
     }
 
     return node;

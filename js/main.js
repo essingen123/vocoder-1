@@ -17,7 +17,8 @@ console.log("worked!!!");
 
 var audio_controller = (function(){
 
-    var audio = new Array();
+    var buffer = new Array();
+    var source = new Array();
 
     $('input').each(function(i){
         $(this).change(function(evt){
@@ -38,33 +39,45 @@ var audio_controller = (function(){
     $('#play').click(play);
     $('#stop').click(stop);
 
-    function add(buffer){
+    function add(input){
         console.log("audio added.");
-        audio.push(buffer);
+        buffer.push(input);
     }
 
     function init(){
 
+        /**
         for(var i = 0; i < audio.length; i++){
             audio[i].source = context.createBufferSource();
             audio[i].source.buffer = audio[i];
 
             audio[i].source.connect(vocoder);
         }
-
-        vocoder.connect(context.destination);
+        **/
     }
 
     function play(){
-        init();
-        for(var i = 0; i < audio.length; i++){
-            audio[i].source.start();
-        }
+
+        source[0] = context.createBufferSource();
+        source[0].buffer = buffer[0];
+
+        source[1] = context.createBufferSource();
+        source[1].buffer = buffer[1];
+
+        var test = context.createChannelMerger(2);
+
+        source[0].connect(test, 0, 0);
+        source[1].connect(test, 0, 1);
+
+        test.connect(context.destination);
+
+        source[0].start();
+        source[1].start();
     }
 
     function stop(){
-        for(var i = 0; i < audio.length; i++){
-            audio[i].source.stop();
+        for(var i = 0; i < source.length; i++){
+            source[i].stop();
         }
     }
 
