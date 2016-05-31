@@ -3,11 +3,15 @@
 */
 var vocoder = (function(){
 
-    var bs = 512;
-    var numIn = 4;
-    var numOut = 1;
+    var bs = 4096; // frame buffer size
+    var sf = 44100; // sampling frequency
+    var numIn = 4; // number of input buffer channel
+    var numOut = 1; // number of output buffer channel
 
     var node = context.createScriptProcessor(bs, numIn, numOut);
+
+    var peak = new Float32Array(bs);
+    var fft = new FFT(bs, sf);
 
     node.onaudioprocess = function(evt){
 
@@ -22,41 +26,27 @@ var vocoder = (function(){
             dataIn[i] = buffIn.getChannelData(i);
         }
 
-        //console.log("0 -> " + dataIn[0][0] + " 1 -> " + dataIn[1][0] + "2 -> " + dataIn[2][0] + " 3 -> " + dataIn[3][0]);
-
-
-        var data = new complex_array.ComplexArray(bs);
-        data.map(function(value, i, n){
-            
-        })
-
         for(var s = 0; s < bs; s++){
 
-            
-
-
-            
             dataOut[s] = (dataIn[0][s] + dataIn[1][s]) / 2.0;
         }
+
+        fft.forward(dataOut);
+
+        for(var s = 0; s < bs; s++){
+            fft.spectrum[s] *= -1 * Math.log((fft.bufferSize/2 - i) * (0.5/fft.bufferSize/2)) * fft.bufferSize;
+
+            if ( peak[s] < fft.spectrum[s]) {
+                peak[s] = fft.spectrum[s];
+            } else {
+                peak[s] *= 0.99;
+            }
+        }
+
+        console.log("peak 2048 - > " + peak[400]);
+
     }
 
     return node;
 
 })();
-
-
-var data = new complex_array.ComplexArray(512)
-// Use the in-place mapper to populate the data.
-data.map(function(value, i, n) {
-    value.real = (i > n/3 && i < 2*n/3) ? 1 : 0
-})
-
-var frequencies = data.FFT()
-
-// Implement a low-pass filter using the in-place mapper.
-frequencies.map(function(frequency, i, n) {
-    if (i > n/5 && i < 4*n/5) {
-        frequency.real = 0
-        frequency.imag = 0
-    }
-})
