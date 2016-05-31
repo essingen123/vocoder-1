@@ -20,6 +20,7 @@ var audio_controller = (function(){
     var buffer = new Array();
     var source = new Array();
 
+    /** load files via input selection **/
     $('input').each(function(i){
         $(this).change(function(evt){
             evt.preventDefault();
@@ -35,6 +36,27 @@ var audio_controller = (function(){
             freader.readAsArrayBuffer(evt.target.files[0]);
         });
     });
+
+    /** preload files from server **/
+    $(document).ready(function() {
+        $.each(["../vocoder/audio/Donald_trump.wav", "../vocoder/audio/Im_different_sin.wav"], function( i, url ) {
+
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true);
+            request.responseType = 'arraybuffer';
+
+            // Decode asynchronously
+            request.onload = function() {
+                context.decodeAudioData(request.response, add, error);
+
+                function error(){
+                    alert("Error occured while preloading audio file.");
+                }
+            }
+            request.send();
+        });
+    });
+    
 
     $('#play').click(play);
     $('#stop').click(stop);

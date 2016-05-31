@@ -12,8 +12,6 @@ var vocoder = (function(){
 
     var fftBuffer = new complex_array.ComplexArray(bs);
 
-    var frequencies = fftBuffer.FFT();
-
     node.onaudioprocess = function(evt){
 
         var buffIn = evt.inputBuffer;
@@ -36,7 +34,7 @@ var vocoder = (function(){
         var frequencies = fftBuffer.FFT();
 
         frequencies.map(function(freq, i, length){
-            if (i > length/5 && i < 4*length/5) {
+            if (i < length/2) {
                 freq.real = 0;
                 freq.imag = 0;
             }
@@ -45,6 +43,12 @@ var vocoder = (function(){
         fftBuffer.map(function(sample, s, length){
             dataOut[s] = sample.real;
         });
+
+        /**
+        for(var s = 0; s < bs; s++){
+            dataOut[s] = (dataIn[0][s] + dataIn[1][s]) / 2.0;
+        }
+        **/
 
     }
 
