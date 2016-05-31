@@ -3,15 +3,16 @@
 */
 var vocoder = (function(){
 
-    var bs = 4096; // frame buffer size
+    var bs = 512; // frame buffer size
     var sf = 44100; // sampling frequency
-    var numIn = 4; // number of input buffer channel
+    var numIn = 2; // number of input buffer channel
     var numOut = 1; // number of output buffer channel
 
     var node = context.createScriptProcessor(bs, numIn, numOut);
 
-    var peak = new Float32Array(bs);
-    var fft = new FFT(bs, sf);
+    var fftBuffer = new complex_array.ComplexArray(bs);
+
+    var frequencies = fftBuffer.FFT();
 
     node.onaudioprocess = function(evt){
 
@@ -26,24 +27,24 @@ var vocoder = (function(){
             dataIn[i] = buffIn.getChannelData(i);
         }
 
-        for(var s = 0; s < bs; s++){
+        fftBuffer.map(function(sample, s, length){
+            var temp = (dataIn[0][s] + dataIn[1][s]) / 2.0;
+            sample.real = temp;
+            sample.imag = temp;
+        });
 
-            dataOut[s] = (dataIn[0][s] + dataIn[1][s]) / 2.0;
-        }
+        var frequencies = fftBuffer.FFT();
 
-        fft.forward(dataOut);
-
-        for(var s = 0; s < bs; s++){
-            fft.spectrum[s] *= -1 * Math.log((fft.bufferSize/2 - i) * (0.5/fft.bufferSize/2)) * fft.bufferSize;
-
-            if ( peak[s] < fft.spectrum[s]) {
-                peak[s] = fft.spectrum[s];
-            } else {
-                peak[s] *= 0.99;
+        frequencies.map(function(freq, i, length){
+            if (i > length/5 && i < 4*length/5) {
+                freq.real = 0;
+                freq.imag = 0;
             }
-        }
+        });
 
-        console.log("peak 2048 - > " + peak[400]);
+        fftBuffer.map(function(sample, s, length){
+            dataOut[s] = sample.real;
+        });
 
     }
 
