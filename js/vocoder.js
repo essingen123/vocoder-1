@@ -25,22 +25,35 @@ var vocoder = (function(){
             dataIn[i] = buffIn.getChannelData(i);
         }
 
+        fftBuffer.map(function(sample, s, len){
+            var temp = (dataIn[0][s] + dataIn[1][s]) / 2;
+            //sample.real = temp;
+            //sample.imag = temp;
+        });
+
+        var filtered = fftBuffer.frequencyMap(function(freq, i, n) {
+
+        });
+
+        /**
         fftBuffer.map(function(sample, s, length){
-            var temp = (dataIn[0][s] + dataIn[1][s]) / 2.0;
+            var temp = (dataIn[0][s]); // + dataIn[1][s]) / 2.0;
             sample.real = temp;
             sample.imag = temp;
         });
 
         var frequencies = fftBuffer.FFT();
 
+        
         frequencies.map(function(freq, i, length){
             if (i < length/2) {
                 freq.real = 0;
                 freq.imag = 0;
             }
         });
+        **/
 
-        fftBuffer.map(function(sample, s, length){
+        filtered.map(function(sample, s, length){
             dataOut[s] = sample.real;
         });
 
