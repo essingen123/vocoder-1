@@ -37,17 +37,14 @@ var vocoder = (function(){
                 freq.real = 0.0;
                 freq.imag = 0.0;   
             }
-
             
-            
-
             /**
             freq.real *= (i / n);
             **/
         });
 
-        filtered.map(function(sample, s, length){
-            dataOut[s] = sample.real;
+        filtered.forEach(function(c_value, s) {
+            dataOut[s] = c_value.real;
         });
     }
 
