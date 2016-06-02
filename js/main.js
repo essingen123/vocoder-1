@@ -27,11 +27,9 @@ var audio_controller = (function(){
             var freader = new FileReader();
 
             freader.onload = function(e){
-                context.decodeAudioData(e.target.result, add, error);
-
-                function error(){
-                    alert("Error occured while reading audio file.");
-                }
+                context.decodeAudioData(e.target.result).then(function(input) {
+                    buffer.push(input);
+                });
             };
             freader.readAsArrayBuffer(evt.target.files[0]);
         });
@@ -47,12 +45,10 @@ var audio_controller = (function(){
 
             // Decode asynchronously
             request.onload = function() {
-                context.decodeAudioData(request.response, add, error);
-
-                function error(){
-                    alert("Error occured while preloading audio file.");
-                }
-            }
+                context.decodeAudioData(request.response).then(function(input){
+                    addToPos(input, i);
+                });
+            };
             request.send();
         });
     });
@@ -66,40 +62,32 @@ var audio_controller = (function(){
         buffer.push(input);
     }
 
-    function init(){
-
-        /**
-        for(var i = 0; i < audio.length; i++){
-            audio[i].source = context.createBufferSource();
-            audio[i].source.buffer = audio[i];
-
-            audio[i].source.connect(vocoder);
-        }
-        **/
+    function addToPos(input, pos){
+        console.log("audio added.");
+        buffer[pos] = input;
     }
 
-    function play(){
+    function init(){
 
         source[0] = context.createBufferSource();
         source[0].buffer = buffer[0];
 
-        //console.log("outputs source 0 -> " + source[0].numberOfOutputs);
-
         source[1] = context.createBufferSource();
         source[1].buffer = buffer[1];
-
-        //console.log("outputs source 1 -> " + source[1].numberOfOutputs);
 
         merge = context.createChannelMerger(2);
 
         source[0].connect(merge, 0, 0);
         source[1].connect(merge, 0, 1);
 
-        //source[0].connect(vocoder);
-
         merge.connect(vocoder);
 
         vocoder.connect(context.destination);
+    }
+
+    function play(){
+
+        init();
 
         source[0].start();
         source[1].start();
@@ -116,3 +104,6 @@ var audio_controller = (function(){
     }
 
 })();
+
+
+$("#canvas").css({"width" : 512 + "px", "height" : 512 + "px"});
