@@ -37,7 +37,7 @@ var audio_controller = (function(){
 
     /** preload files from server **/
     $(document).ready(function() {
-        $.each(["../vocoder/audio/Donald_trump.wav", "../vocoder/audio/Im_different_sin.wav"], function( i, url ) {
+        $.each(["../vocoder/audio/test1.wav", "../vocoder/audio/test1.wav"], function( i, url ) {
 
             var request = new XMLHttpRequest();
             request.open('GET', url, true);

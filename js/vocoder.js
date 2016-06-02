@@ -27,18 +27,19 @@ var vocoder = (function(){
         dataIn[1] = buffIn.getChannelData(1);
 
         fftBuffer.map(function(sample, s, len){
-            var temp = (dataIn[0][s]); // + dataIn[1][s]) / 2;
+            var temp = (dataIn[1][s]); // + dataIn[1][s]) / 2;
             sample.real = temp;
-            sample.imag = temp;
         });
 
         filtered = fftBuffer.frequencyMap(function(freq, i, n) {
-            /**
-            if (i < 128 || i > 256) {
-                freq.real = 0;
-                freq.imag = 0;
+            
+            if( i > n / 6 || i > n * 5 / 6){
+                freq.real = 0.0;
+                freq.imag = 0.0;   
             }
-            **/
+
+            
+            
 
             /**
             freq.real *= (i / n);

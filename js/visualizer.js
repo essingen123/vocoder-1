@@ -35,8 +35,8 @@ var Visualizer = (function(){
             canCtx.beginPath();
             
             for(var i = 0; i < bufferLength; i++) {
-                canCtx.moveTo(i + 15, 128);
-                canCtx.lineTo(i + 15, 128 - (dataArray[i] / 3));
+                canCtx.moveTo(i , 128);
+                canCtx.lineTo(i , 128 - (dataArray[i] / 3));
             }
             canCtx.stroke();
             
