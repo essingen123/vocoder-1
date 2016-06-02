@@ -12,13 +12,6 @@ var vocoder = (function(){
 
     var fftBuffer, buffIn, buffOut, dataIn, dataOut, filtered;
 
-    var canCtx = document.getElementById("canvas").getContext("2d");
-    canCtx.lineWidth = 1;
-    canCtx.strokeStyle = '#33ccff';
-    canCtx.fillStyle = "#292929";
-
-    canCtx.fillRect(0,0,bs,bs);
-
     node.onaudioprocess = function(evt){
 
         fftBuffer = new complex_array.ComplexArray(bs);
@@ -40,19 +33,21 @@ var vocoder = (function(){
         });
 
         filtered = fftBuffer.frequencyMap(function(freq, i, n) {
-            if(i > n / 2){
-                freq.imag /= 16.00;
-                freq.real /= 16.00;
+            /**
+            if (i < 128 || i > 256) {
+                freq.real = 0;
+                freq.imag = 0;
             }
+            **/
+
+            /**
+            freq.real *= (i / n);
+            **/
         });
 
         filtered.map(function(sample, s, length){
             dataOut[s] = sample.real;
         });
-    }
-
-    function visualize(){
-
     }
 
     return node;

@@ -83,6 +83,9 @@ var audio_controller = (function(){
         merge.connect(vocoder);
 
         vocoder.connect(context.destination);
+
+        // give the animation a source
+        Visualizer.animate(512, vocoder);
     }
 
     function play(){
